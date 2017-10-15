@@ -1,0 +1,102 @@
+Predictors Correlation and Bias - DDP Project presentation
+========================================================
+author: Bruno Fischer Colonimos
+date: 2017-10-15
+autosize: true
+
+## How omitting a predictor in a regression model may cause bias in the cefficients of the other predictors - Illustration with a Shiny app
+
+
+Motivation - Situation
+========================================================
+
+As Brian Caffo puts it :
+"What happens if we omit a variable that we should have included [ _in a linear model_]? The general result is [...] **bias**. In other words, if you're interested in [...] a particular regressor and you've omitted something that's correlated with that regressor, then [...] you're not going to get an accurate estimate of what you want to estimate, because of this other variable."
+
+This Shiny app proposes an exploration of a situation in which a manager wishes to explain the variation in sales in several sales sectors by the advertising expense, and , possibly, by the activity (number of visits to retail stores) of the sales representatives of the company. But when a simple regression model is fitted, we get a problematic result:
+
+```{r datamodel, echo=FALSE}
+# data
+vis <- data.frame(
+        Adv = c(110,  95,  75,  90,  85,  80, 105, 120),
+        Visits = c(26, 28, 34, 31, 29, 36, 25, 23),
+        Sales = c(75, 76, 82, 82, 76, 83, 76, 74)
+)
+
+# Simple linear model
+# 1-var
+mod1 <- lm(Sales ~ Adv, data=vis)
+
+# function to get the equation (text) for a simple linear regression model
+regeq <- function(mod, digits = 3) {
+        co <- coef(mod)
+        response <- attr(mod$terms, "variables")[[2]]
+        predictors <- names(co)
+        # function for constructing the body
+        partialeq <- function(x, predname) {
+                op <- ifelse(sign(x) >=0, "+", "-")
+                paste(op, format(abs(x), digits = digits), predname)
+        }
+        bodyeq <- paste(mapply(partialeq, co[-1], predictors[-1]), collapse = " ")
+
+        equa <- paste(response,
+                      "=",
+                      format(co[1], digits = digits),
+                      bodyeq
+        )
+        equa
+}
+
+# store the equation in 'modeq'
+
+modeq <- regeq(mod1)
+```
+
+
+The problem
+========================================================
+
+The corresponding scatterplot is:
+```{r plotsingle, echo=FALSE}
+# plot
+with(vis,
+     {plot(Adv, Sales, col = "blue", pch=16, cex = 2)
+     abline(mod1)}
+)
+```
+***
+The slope of the model is very odd indeed.
+
+`r paste0("$$", modeq, "$$"  )`
+
+This equation seems to imply that more advertising leads to less sales!
+
+Why and how does this happen?
+
+
+
+The App Principle
+========================================================
+transition: rotate
+incremental: true
+The app presents the situation, along with:
+
+* simple-regression models with each predictor considered alone. For each model, a scatterplot with the corresponding regression line fitted is shown.
+* a scatterplot matrix, which could help to explain the reason of the surprising result.
+
+Then, on a separate tab, a 3D scatterplot, with a regression plane fitted, is made accessible to the user. The user can change the viewing angles of this 3D representation, and discover how the correlation of the two predictors induces a misleading bias if the sales representatives activity predictor is omitted  from the model.
+
+Shiny App, Code and References
+========================================================
+## Project elements
+* Launching the Shiny app : https://brufico.shinyapps.io/proj_app
+* Shiny app R-code:
+* Presentation .Rpres source:
+
+***
+
+## References
+* General Principles: Caffo,Brian (2017 ?) _Coursera: Regression models"_: [link](https://www.coursera.org/learn/regression-models/lecture/GOe0R/model-selection-part-i])
+* Story and data: de Lagarde, Jean (1998); _Analyse des donnees_, Dunod.
+* 3D package: Soetart , Karline (2017), package _plot3D_, CRAN.
+

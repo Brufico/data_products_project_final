@@ -1,0 +1,10 @@
+name: proj_app
+title:
+username:
+account: brufico
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 223392
+bundleId: 1018194
+url: https://brufico.shinyapps.io/proj_app/
+when: 1507588926.47673
