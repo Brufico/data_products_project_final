@@ -4,7 +4,7 @@ author: Bruno Fischer Colonimos
 date: 2017-10-15
 autosize: true
 
-## How omitting a predictor in a regression model may cause bias in the cefficients of the other predictors - Illustration with a Shiny app
+## How omitting a predictor in a regression model may cause bias in the coefficients of the other predictors - Illustration with a Shiny app
 
 
 Motivation - Situation
@@ -90,8 +90,8 @@ Shiny App, Code and References
 ========================================================
 ## Project elements
 * Launching the Shiny app : https://brufico.shinyapps.io/proj_app
-* Shiny app R-code:
-* Presentation .Rpres source:
+* Shiny app R-code: https://github.com/Brufico/data_products_project_final/tree/master/proj_app
+* Presentation .Rpres source: https://github.com/Brufico/data_products_project_final/blob/master/proj_pres.Rpres
 
 ***
 
